@@ -1,9 +1,16 @@
-const game = prompt('Would you like to play a game?');
+startGame();
 
-if (game === 'yes' || game === 'Yes') {
-    const username = prompt('What is your username?');
+function startGame() {
+    const game = prompt('Would you like to play a game?');
+    if (game.toLowerCase().trim() === 'yes') {
+        const username = prompt('What is your username?');
+        startCombat(username);
+    }
+}
+
+function startCombat(username) {
     const grant = 'Almighty Grant';
-    const randomNum = (min, max) => {
+    const getDamage = (min, max) => {
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
@@ -11,28 +18,28 @@ if (game === 'yes' || game === 'Yes') {
     let gResult = 10;
     let uWin = 0;
 
-while (uResult >= 1 && gResult >= 1 && uWin <= 2) {
-    uResult -= randomNum(1, 2);
-    console.log(`${username} has ${uResult} health left.`);
-    gResult -= randomNum(1, 2);
-    console.log(`${grant} has ${gResult} left.`);
+    while (uResult > 0 && uWin < 3) {
+        const attack = prompt(`${username}, would you like to attack or quit?`);
+        if (attack.toLowerCase().trim() === 'attack') {
+            uResult -= getDamage(1, 5);
+            console.log(`${username} has ${uResult} health left.`);
+            gResult -= getDamage(1, 5);
+            console.log(`${grant} has ${gResult} left.`);
 
-    if (gResult <= 0 && uWin === 0) {
-    uWin++;
-    console.log(`${username} has ${uWin} win!`);
-    gResult = 10;
-
-    } else if (gResult <= 0 && uWin <= 1) {
-        uWin++;
-        console.log(`${username} has ${uWin} wins!`);
-        gResult = 10;
-
-    } else if (gResult <= 0 && uWin >= 2) {
-        console.log(`WINNER: ${username}!`);
-
-    } else if (uResult <= 0) {
-        console.log(`WINNER: ${grant}!`);
-
+            if (gResult <= 0) {
+                uWin++;
+                console.log(`${username} has ${uWin} win${uWin > 1 ? 's' : ''}!`);
+                gResult = 10;
+            }
+        } else {
+            return
+        }
     }
-} 
+
+        if (uWin > 2) {
+            console.log(`WINNER: ${username}!`);
+        } else {
+            console.log(`WINNER: ${grant}!`);
+        }
+
 }
